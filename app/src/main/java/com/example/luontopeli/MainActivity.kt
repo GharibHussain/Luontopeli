@@ -33,7 +33,7 @@ fun LuontopeliApp() {
     val navController = rememberNavController()
 
     Scaffold(
-        // Alanavigaatiopalkki kaikilla näkymillä
+        // bottom bar
         bottomBar = {
             LuontopeliBottomBar(navController = navController)
         }

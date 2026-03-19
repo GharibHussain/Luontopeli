@@ -14,6 +14,7 @@ fun LuontopeliBottomBar(navController: NavController) {
     val currentRoute = navBackStackEntry?.destination?.route
 
     NavigationBar {
+        // iterate through all screens (bottomNavScreens)
         Screen.bottomNavScreens.forEach { screen ->
             NavigationBarItem(
                 // Onko tämä reitti aktiivinen?

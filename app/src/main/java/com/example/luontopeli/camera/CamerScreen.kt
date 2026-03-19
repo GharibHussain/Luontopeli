@@ -4,6 +4,7 @@ package com.example.luontopeli.camera
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Camera
+import androidx.compose.material.icons.filled.CameraAlt
 import androidx.compose.material.icons.filled.Map
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
@@ -21,14 +22,14 @@ fun CameraScreen() {
     ) {
         Column(horizontalAlignment = Alignment.CenterHorizontally) {
             Icon(
-                imageVector = Icons.Filled.Camera,
+                imageVector = Icons.Filled.CameraAlt,
                 contentDescription = null,
                 modifier = Modifier.size(64.dp),
                 tint = MaterialTheme.colorScheme.primary
             )
             Spacer(modifier = Modifier.height(16.dp))
             Text(
-                text = "Kartta",
+                text = "Camera",
                 style = MaterialTheme.typography.headlineMedium
             )
             Text(

@@ -2,6 +2,7 @@ package com.example.luontopeli.ui.discover
 
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Explore
 import androidx.compose.material.icons.filled.Map
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
@@ -18,14 +19,14 @@ fun DiscoverScreen() {
     ) {
         Column(horizontalAlignment = Alignment.CenterHorizontally) {
             Icon(
-                imageVector = Icons.Filled.Map,
+                imageVector = Icons.Filled.Explore,
                 contentDescription = null,
                 modifier = Modifier.size(64.dp),
                 tint = MaterialTheme.colorScheme.primary
             )
             Spacer(modifier = Modifier.height(16.dp))
             Text(
-                text = "Kartta",
+                text = "Discover",
                 style = MaterialTheme.typography.headlineMedium
             )
             Text(

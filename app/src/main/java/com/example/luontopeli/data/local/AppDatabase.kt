@@ -9,22 +9,31 @@ import com.example.luontopeli.data.local.dao.WalkSessionDao
 import com.example.luontopeli.data.local.entity.NatureSpot
 import com.example.luontopeli.data.local.entity.WalkSession
 
-
+/**
+ * Room-tietokannan pääluokka (Singleton-malli).
+ *
+ * Hallinnoi SQLite-tietokantaa ja tarjoaa DAO-rajapinnat tietokantaoperaatioille.
+ * Käyttää fallbackToDestructiveMigration()-strategiaa kehitysvaiheessa,
+ * mikä tyhjentää tietokannan skeeman muuttuessa (tuotannossa käytettäisiin migraatiota).
+ */
 @Database(
     entities = [
-        NatureSpot::class,   // ← UUSI tällä viikolla
-        WalkSession::class   // Viikolta 2
+        NatureSpot::class,   // Luontolöydöt (viikko 4)
+        WalkSession::class   // Kävelysessiot (viikko 2)
     ],
-    version = 1,   // I have not changed the version
+    version = 2,             // Kasvatettu 1→2 koska lisättiin NatureSpot
     exportSchema = false
 )
 abstract class AppDatabase : RoomDatabase() {
+    /** DAO luontolöytöjen tietokantaoperaatioille */
     abstract fun natureSpotDao(): NatureSpotDao
+    /** DAO kävelysessioiden tietokantaoperaatioille */
     abstract fun walkSessionDao(): WalkSessionDao
 
     companion object {
         @Volatile private var INSTANCE: AppDatabase? = null
 
+        /** Palauttaa tietokannan singleton-instanssin (thread-safe) */
         fun getDatabase(context: Context): AppDatabase {
             return INSTANCE ?: synchronized(this) {
                 Room.databaseBuilder(

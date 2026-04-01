@@ -36,6 +36,8 @@ dependencies {
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
     implementation(libs.androidx.activity.compose)
+    implementation(libs.androidx.material3)
+    implementation(libs.androidx.ui)
 
     // Compose BOM — hallitsee Compose-kirjastojen versiot automaattisesti
     val composeBom = platform(libs.androidx.compose.bom)

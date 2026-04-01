@@ -4,26 +4,42 @@ import androidx.room.Entity
 import androidx.room.PrimaryKey
 import java.util.UUID
 
-// NatureSpot = yksi löydetty luontokohde
-// Jokainen kuvattu kasvi/luontokohde tallennetaan omana rivinä
+/**
+ * Room-entiteetti yksittäiselle luontolöydölle.
+ *
+ * Jokainen kuvattu kasvi/luontokohde tallennetaan omana rivinä "nature_spots"-tauluun.
+ * Sisältää GPS-sijainnin, kuvapolun, ML Kit -tunnistustuloksen ja synkronointitilan.
+ *
+ * UUID pääavaimena mahdollistaa offline-luonnin ilman ID-konflikteja
+ * ja yhteensopivuuden Firestore-dokumentti-ID:n kanssa.
+ */
 @Entity(tableName = "nature_spots")
 data class NatureSpot(
-    // UUID pääavaimena (globaalisti uniikki, sopii myös Firestoreen)
+    /** Globaalisti uniikki tunniste (UUID), toimii myös Firestore-dokumentin ID:nä */
     @PrimaryKey val id: String = UUID.randomUUID().toString(),
 
-    val name: String,                        // Käyttäjän antama nimi tai automaattinen
-    val latitude: Double,                    // GPS-koordinaatti
-    val longitude: Double,                   // GPS-koordinaatti
+    /** Löydön nimi – ML Kit -tunnistustulos tai käyttäjän antama */
+    val name: String,
+    /** GPS-leveysaste (WGS84) */
+    val latitude: Double,
+    /** GPS-pituusaste (WGS84) */
+    val longitude: Double,
 
-    val imageLocalPath: String? = null,      // Polku laitteen tiedostoon
-    val imageFirebaseUrl: String? = null,    // Firebase Storage URL (lisätään viikolla 6)
+    /** Kuvan paikallinen tiedostopolku (sovelluksen sisäinen tallennustila) */
+    val imageLocalPath: String? = null,
+    /** Firebase Storage -URL (täytetään pilvisynkronoinnissa) */
+    val imageFirebaseUrl: String? = null,
 
-    val plantLabel: String? = null,          // ML Kitin tunnistama kasvilaji (viikko 5)
-    val confidence: Float? = null,           // Tunnistuksen varmuus 0-1
+    /** ML Kit -tunnistama kasvilaji (esim. "Rosa canina") */
+    val plantLabel: String? = null,
+    /** ML Kit -tunnistuksen luottamusarvo (0.0–1.0) */
+    val confidence: Float? = null,
 
-    val userId: String? = null,              // Firebase Auth UID (viikko 6)
+    /** Firebase Auth -käyttäjätunniste (UID) */
+    val userId: String? = null,
+    /** Löydön aikaleima millisekunteina (epoch) */
     val timestamp: Long = System.currentTimeMillis(),
 
-    // synced = false kun vain paikallinen, true kun synkronoitu Firestoreen
+    /** Synkronointitila: false = vain paikallinen, true = synkronoitu Firestoreen */
     val synced: Boolean = false
 )

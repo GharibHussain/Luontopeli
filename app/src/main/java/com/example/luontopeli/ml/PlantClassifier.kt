@@ -32,7 +32,18 @@ class PlantClassifier {
         "plant", "flower", "tree", "shrub", "leaf", "fern", "moss",
         "mushroom", "fungus", "grass", "herb", "bush", "berry",
         "pine", "birch", "spruce", "algae", "lichen", "bark",
-        "nature", "forest", "woodland", "botanical", "flora"
+        "nature", "forest", "woodland", "botanical", "flora",
+
+        //----------------------------(Lisäominaisuus)------------------------------
+        // eläimet, linnut, hyönteiset
+        "animal", "wildlife", "bird", "mammal", "reptile", "butterfly", "fish", "fauna", "bee", "spider",
+        "dog", "cat", "bird", "duck", "eagle", "sparrow", "horse", "cow", "sheep", "deer",
+        "animal", "wildlife", "mammal",
+        // sienet
+        "mushroom", "fungus", "fungi", "bolete", "agaric",
+        // esineet, mpäristö
+        "rock", "stone", "water", "sky", "outdoor", "object"
+        //---------------------------------------------------------------------------
     )
 
     /**

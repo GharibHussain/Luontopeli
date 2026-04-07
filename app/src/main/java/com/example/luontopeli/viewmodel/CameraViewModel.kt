@@ -8,6 +8,7 @@ import androidx.camera.core.ImageCaptureException
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.luontopeli.LuontopeliApplication
 import com.example.luontopeli.ml.PlantClassifier
 import com.example.luontopeli.data.local.AppDatabase
 import com.example.luontopeli.data.local.entity.NatureSpot
@@ -15,6 +16,7 @@ import com.example.luontopeli.data.remote.firebase.AuthManager
 import com.example.luontopeli.data.remote.firebase.FireStoreManager
 import com.example.luontopeli.data.remote.firebase.StorageManager
 import com.example.luontopeli.data.repository.NatureSpotRepository
+import com.example.luontopeli.location.LocationManager
 import com.example.luontopeli.ml.ClassificationResult
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -49,6 +51,15 @@ class CameraViewModel(application: Application): AndroidViewModel(application) {
         authManager = AuthManager()
     )
 
+    //------------------------(Extra Assignment)--------------------------
+    // location manger
+    private val locationManager = (application as LuontopeliApplication).locationManager
+
+    private val _currentLatitude = MutableStateFlow(0.0)
+    private val _currentLongitude = MutableStateFlow(0.0)
+
+    //--------------------------------------------------------------------
+
     /** ML Kit -pohjainen kasvin tunnistaja (toimii laitteella ilman internetiä) */
     private val classifier = PlantClassifier()
 
@@ -68,6 +79,20 @@ class CameraViewModel(application: Application): AndroidViewModel(application) {
     var currentLatitude: Double = 0.0
     var currentLongitude: Double = 0.0
 
+    //------------------------(Extra Assignment)--------------------------
+    init {
+        // get location
+        viewModelScope.launch {
+            locationManager.currentLocation.collect { location ->
+                location?.let {
+                    currentLatitude = it.latitude
+                    currentLongitude = it.longitude
+                }
+            }
+        }
+    }
+    //--------------------------------------------------------------------
+
     /**
      * Ottaa kuvan CameraX:n ImageCapture-objektilla ja tunnistaa kasvin.
      *
@@ -77,7 +102,6 @@ class CameraViewModel(application: Application): AndroidViewModel(application) {
      * 3. Onnistuneen kuvan jälkeen käynnistää ML Kit -tunnistuksen taustasäikeessä
      * 4. Päivittää UI-tilan tunnistuksen tuloksella
      */
-
     // takePhoto()-metodi päivittyy – ML Kit -tunnistus lisätään onImageSaved-callbackiin:
     fun takePhoto(context: Context, imageCapture: ImageCapture) {
         _isLoading.value = true

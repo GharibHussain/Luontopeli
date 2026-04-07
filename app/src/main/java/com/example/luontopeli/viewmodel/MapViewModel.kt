@@ -4,6 +4,7 @@ import android.app.Application
 import android.location.Location
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.luontopeli.LuontopeliApplication
 import com.example.luontopeli.data.local.AppDatabase
 import com.example.luontopeli.data.local.entity.NatureSpot
 import com.example.luontopeli.location.LocationManager
@@ -17,7 +18,11 @@ import kotlinx.coroutines.launch
 class MapViewModel(application: Application): AndroidViewModel(application){
 
     // LocationManager-instanssi — käyttää Applicationin kontekstia
-    private val locationManager = LocationManager(application)
+    //private val locationManager = LocationManager(application)
+
+    //------------------------(Extra Assignment)--------------------------
+    private val locationManager = (application as LuontopeliApplication).locationManager
+    //--------------------------------------------------------------------
     private val db = AppDatabase.getDatabase(application)
 
     // Delegoidaan StateFlowt suoraan LocationManagerilta

@@ -77,21 +77,17 @@ class CameraViewModel(application: Application): AndroidViewModel(application) {
      * 3. Onnistuneen kuvan jälkeen käynnistää ML Kit -tunnistuksen taustasäikeessä
      * 4. Päivittää UI-tilan tunnistuksen tuloksella
      */
+
+    // takePhoto()-metodi päivittyy – ML Kit -tunnistus lisätään onImageSaved-callbackiin:
     fun takePhoto(context: Context, imageCapture: ImageCapture) {
         _isLoading.value = true
 
-        // Luodaan uniikki tiedostonimi aikaleimalla
         val timestamp = SimpleDateFormat("yyyyMMdd_HHmmss", Locale.getDefault())
             .format(Date())
-
-        // Tallennetaan kuvat sovelluksen sisäiseen hakemistoon (nature_photos/)
         val outputDir = File(context.filesDir, "nature_photos").also { it.mkdirs() }
         val outputFile = File(outputDir, "IMG_${timestamp}.jpg")
-
         val outputOptions = ImageCapture.OutputFileOptions.Builder(outputFile).build()
 
-
-        // Otetaan kuva CameraX:lla
         imageCapture.takePicture(
             outputOptions,
             ContextCompat.getMainExecutor(context),
@@ -134,7 +130,7 @@ class CameraViewModel(application: Application): AndroidViewModel(application) {
 
     /**
      * Tallentaa nykyisen luontolöydön Room-tietokantaan.
-     * Luo NatureSpot-entiteetin ML Kit -tunnistustuloksen perusteella.
+     * Luo NatureSpot-entiteetin tunnistustuloksen perusteella.
      */
     fun saveCurrentSpot() {
         val imagePath = _capturedImagePath.value ?: return
@@ -158,7 +154,9 @@ class CameraViewModel(application: Application): AndroidViewModel(application) {
         }
     }
 
-    /** Vapauttaa ML Kit -resurssit ViewModelin tuhoutuessa. */
+    /**
+     * Vapauttaa ML Kit -resurssit ViewModelin tuhoutuessa.
+     */
     override fun onCleared() {
         super.onCleared()
         classifier.close()

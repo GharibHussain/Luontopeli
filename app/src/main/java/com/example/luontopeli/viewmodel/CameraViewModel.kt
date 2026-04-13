@@ -13,7 +13,8 @@ import com.example.luontopeli.ml.PlantClassifier
 import com.example.luontopeli.data.local.AppDatabase
 import com.example.luontopeli.data.local.entity.NatureSpot
 import com.example.luontopeli.data.remote.firebase.AuthManager
-import com.example.luontopeli.data.remote.firebase.FireStoreManager
+import com.example.luontopeli.data.remote.firebase.FirestoreManager
+
 import com.example.luontopeli.data.remote.firebase.StorageManager
 import com.example.luontopeli.data.repository.NatureSpotRepository
 import com.example.luontopeli.location.LocationManager
@@ -46,7 +47,7 @@ class CameraViewModel(application: Application): AndroidViewModel(application) {
      */
     private val repository = NatureSpotRepository(
         dao = db.natureSpotDao(),
-        fireStoreManager = FireStoreManager(),
+        firestoreManager  = FirestoreManager(),
         storageManager = StorageManager(),
         authManager = AuthManager()
     )

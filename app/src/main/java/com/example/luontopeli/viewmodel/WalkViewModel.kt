@@ -3,7 +3,9 @@ package com.example.luontopeli.viewmodel
 import android.app.Application
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.luontopeli.data.local.AppDatabase
 import com.example.luontopeli.data.local.entity.WalkSession
+import com.example.luontopeli.data.repository.WalkRepository
 import com.example.luontopeli.sensor.STEP_LENGTH_METERS
 import com.example.luontopeli.sensor.StepCounterManager
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -17,6 +19,9 @@ class WalkViewModel(application: Application) : AndroidViewModel(application) {
 
     // stepManager
     private val stepManager = StepCounterManager(application)
+
+    private val db = AppDatabase.getDatabase(application)
+    private val repository = WalkRepository(db.walkSessionDao())
 
     // Aktiivisen sessoin tila
     private val _currentSession = MutableStateFlow<WalkSession?>(null)  // mutable
@@ -58,11 +63,14 @@ class WalkViewModel(application: Application) : AndroidViewModel(application) {
         }
 
         // Tallenna päättynyt sessio Room-tietokantaan
+
         viewModelScope.launch {
             _currentSession.value?.let { session ->
-                // db.walkSessionDao().insert(session)
+                repository.insertSession(session)
+                _currentSession.value = null
             }
         }
+
     }
 
     // Siivoaa sensorit kun ViewModel tuhotaan

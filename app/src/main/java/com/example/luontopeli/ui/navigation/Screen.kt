@@ -21,8 +21,12 @@ sealed class Screen(
     // Tilastot: askeleet, matka, omat havainnot
     object Stats : Screen("stats", "Tilastot", Icons.Filled.BarChart)
 
+    //------------------------(Extra Assignment)--------------------------
+    object Profile : Screen("profile", "Profiili", Icons.Filled.Person)
+    //--------------------------------------------------------------------
+
     companion object {
         // Lista kaikista bottom nav -kohteista
-        val bottomNavScreens = listOf(Map, Camera, Discover, Stats)
+        val bottomNavScreens = listOf(Map, Camera, Discover, Stats, Profile)
     }
 }

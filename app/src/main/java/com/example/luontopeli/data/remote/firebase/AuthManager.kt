@@ -1,28 +1,46 @@
 package com.example.luontopeli.data.remote.firebase
+
+import com.google.firebase.auth.FirebaseAuth
+import kotlinx.coroutines.tasks.await
+
 /**
- * Offline-tilassa toimiva käyttäjähallinta (AuthManager).
- * Korvaa alkuperäisen Firebase Authentication -toteutuksen
- * paikallisella UUID-pohjaisella käyttäjätunnisteella.
+ * Firebase Authentication -hallinta.
+ *
+ * Käyttää anonyymiä kirjautumista (signInAnonymously), joka antaa
+ * käyttäjälle uniikin UID:n ilman rekisteröitymistä. UID säilyy
+ * sovelluksen uudelleenkäynnistysten välillä.
  */
 class AuthManager {
-    /** Paikallisesti generoitu uniikki käyttäjätunniste (UUID) */
-    private val localUserId: String = java.util.UUID.randomUUID().toString()
 
-    /** Palauttaa nykyisen käyttäjän tunnisteen */
+    /** Firebase Auth -instanssi (singleton) */
+    private val auth = FirebaseAuth.getInstance()
+
+    /** Nykyisen käyttäjän UID tai "anonymous" jos ei kirjautunut */
     val currentUserId: String
-        get() = localUserId
+        get() = auth.currentUser?.uid ?: "anonymous"
 
-    /** Offline-tilassa käyttäjä on aina "kirjautunut sisään" */
+    /** Onko käyttäjä kirjautunut sisään */
     val isSignedIn: Boolean
-        get() = true
+        get() = auth.currentUser != null
 
-    /** Simuloi anonyymiä kirjautumista. Palauttaa aina onnistuneen tuloksen paikallisella UUID:lla. */
+    /**
+     * Kirjautuu sisään anonyymisti.
+     * Firebase luo uniikin UID:n, joka säilyy kunnes käyttäjä
+     * kirjautuu ulos tai sovelluksen data tyhjennetään.
+     *
+     * @return Result.success(uid) tai Result.failure(exception)
+     */
     suspend fun signInAnonymously(): Result<String> {
-        return Result.success(localUserId)
+        return try {
+            val result = auth.signInAnonymously().await()
+            Result.success(result.user?.uid ?: "unknown")
+        } catch (e: Exception) {
+            Result.failure(e)
+        }
     }
 
-    /** Uloskirjautuminen – ei toiminnallisuutta offline-tilassa. */
+    /** Kirjautuu ulos ja poistaa anonyymin session. */
     fun signOut() {
-        // No-op offline-tilassa
+        auth.signOut()
     }
 }

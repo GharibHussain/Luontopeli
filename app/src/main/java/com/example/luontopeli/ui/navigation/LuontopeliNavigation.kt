@@ -9,6 +9,7 @@ import androidx.navigation.compose.composable
 import com.example.luontopeli.ui.map.MapScreen
 import com.example.luontopeli.camera.CameraScreen
 import com.example.luontopeli.ui.discover.DiscoverScreen
+import com.example.luontopeli.ui.profile.ProfileScreen
 import com.example.luontopeli.ui.stats.StatsScreen
 
 @Composable
@@ -34,5 +35,10 @@ fun LuontopeliNavHost(
         composable(Screen.Stats.route) {
             StatsScreen()
         }
+        //------------------------(Extra Assignment)--------------------------
+        composable(Screen.Profile.route) {
+            ProfileScreen()
+        }
+        //--------------------------------------------------------------------
     }
 }

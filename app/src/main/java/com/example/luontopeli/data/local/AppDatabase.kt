@@ -5,8 +5,10 @@ import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
 import com.example.luontopeli.data.local.dao.NatureSpotDao
+import com.example.luontopeli.data.local.dao.UserProfileDao
 import com.example.luontopeli.data.local.dao.WalkSessionDao
 import com.example.luontopeli.data.local.entity.NatureSpot
+import com.example.luontopeli.data.local.entity.UserProfile
 import com.example.luontopeli.data.local.entity.WalkSession
 
 /**
@@ -19,7 +21,11 @@ import com.example.luontopeli.data.local.entity.WalkSession
 @Database(
     entities = [
         NatureSpot::class,   // Luontolöydöt (viikko 4)
-        WalkSession::class   // Kävelysessiot (viikko 2)
+        WalkSession::class,  // Kävelysessiot (viikko 2)
+
+        //------------------------(Extra Assignment)--------------------------
+        UserProfile::class
+        //--------------------------------------------------------------------
     ],
     version = 2,             // Kasvatettu 1→2 koska lisättiin NatureSpot
     exportSchema = false
@@ -29,6 +35,10 @@ abstract class AppDatabase : RoomDatabase() {
     abstract fun natureSpotDao(): NatureSpotDao
     /** DAO kävelysessioiden tietokantaoperaatioille */
     abstract fun walkSessionDao(): WalkSessionDao
+
+    //------------------------(Extra Assignment)--------------------------
+    abstract fun userProfileDao(): UserProfileDao
+    //--------------------------------------------------------------------
 
     companion object {
         @Volatile private var INSTANCE: AppDatabase? = null

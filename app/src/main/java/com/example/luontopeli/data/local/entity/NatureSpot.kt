@@ -41,5 +41,9 @@ data class NatureSpot(
     val timestamp: Long = System.currentTimeMillis(),
 
     /** Synkronointitila: false = vain paikallinen, true = synkronoitu Firestoreen */
-    val synced: Boolean = false
+    val synced: Boolean = false,
+
+    //------------------------(Extra Assignment)--------------------------
+    val comment: String? = null,
+    //--------------------------------------------------------------------
 )

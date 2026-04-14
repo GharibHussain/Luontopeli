@@ -157,7 +157,7 @@ class CameraViewModel(application: Application): AndroidViewModel(application) {
      * Tallentaa nykyisen luontolöydön Room-tietokantaan.
      * Luo NatureSpot-entiteetin tunnistustuloksen perusteella.
      */
-    fun saveCurrentSpot() {
+    fun saveCurrentSpot(comment: String) {
         val imagePath = _capturedImagePath.value ?: return
         viewModelScope.launch {
             val result = _classificationResult.value
@@ -172,7 +172,10 @@ class CameraViewModel(application: Application): AndroidViewModel(application) {
                 longitude = currentLongitude,
                 imageLocalPath = imagePath,
                 plantLabel = (result as? ClassificationResult.Success)?.label,
-                confidence = (result as? ClassificationResult.Success)?.confidence
+                confidence = (result as? ClassificationResult.Success)?.confidence,
+                //------------------------(Extra Assignment)--------------------------
+                comment = comment
+                //--------------------------------------------------------------------
             )
             repository.insertSpot(spot)
             clearCapturedImage()

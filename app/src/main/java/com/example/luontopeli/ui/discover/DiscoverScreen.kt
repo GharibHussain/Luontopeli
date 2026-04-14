@@ -126,6 +126,20 @@ fun NatureSpotCard(spot: NatureSpot) {
                     style = MaterialTheme.typography.bodySmall,
                     color = Color.Gray
                 )
+
+                //------------------------(Extra Assignment)--------------------------
+                spot.comment?.let { comment ->
+                    if (comment.isNotBlank()) {
+                        Text(
+                            text = comment,
+                            style = MaterialTheme.typography.bodyMedium,
+                            color = MaterialTheme.colorScheme.onSurfaceVariant,
+                            maxLines = 2,
+                            modifier = Modifier.padding(vertical = 2.dp)
+                        )
+                    }
+                }
+                //-------------------------------------------------------------------
             }
         }
     }

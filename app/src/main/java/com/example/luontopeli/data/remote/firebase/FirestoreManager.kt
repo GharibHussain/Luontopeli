@@ -39,7 +39,10 @@ class FirestoreManager {
                 "confidence" to spot.confidence,
                 "userId" to spot.userId,
                 "timestamp" to spot.timestamp,
-                "synced" to true
+                "synced" to true,
+                //------------------------(Extra Assignment)--------------------------
+                "comment" to spot.comment
+                //--------------------------------------------------------------------
             )
             spotsCollection.document(spot.id).set(data).await()
             Result.success(Unit)
@@ -68,7 +71,10 @@ class FirestoreManager {
                         confidence = doc.getDouble("confidence")?.toFloat(),
                         userId = doc.getString("userId"),
                         timestamp = doc.getLong("timestamp") ?: 0L,
-                        synced = true
+                        synced = true,
+                        //------------------------(Extra Assignment)--------------------------
+                        comment = doc.getString("comment") ?: ""
+                        //--------------------------------------------------------------------
                     )
                 } ?: emptyList()
                 trySend(spots)

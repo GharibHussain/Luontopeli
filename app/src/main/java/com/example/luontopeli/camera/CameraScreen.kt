@@ -35,6 +35,7 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.LinearProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
+import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -42,6 +43,7 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -163,7 +165,7 @@ fun CameraScreen(viewModel: CameraViewModel = viewModel()) {
                 viewModel = viewModel,
                 imagePath = capturedImagePath!!,
                 onRetake = { viewModel.clearCapturedImage() },
-                onSave = { viewModel.saveCurrentSpot() }
+                onSave = { comment -> viewModel.saveCurrentSpot(comment) }
             )
         }
     }
@@ -174,12 +176,16 @@ fun CapturedImageView(
     viewModel: CameraViewModel,
     imagePath: String,
     onRetake: () -> Unit,
-    onSave: () -> Unit
+    onSave: (String) -> Unit
 ) {
     // classification result
     val result by viewModel.classificationResult.collectAsState()
     //-----------------------------------------------------
 
+
+    //------------------------(Extra Assignment)--------------------------
+    var comment by rememberSaveable { mutableStateOf("") }
+    //--------------------------------------------------------------------
 
     Column(modifier = Modifier.fillMaxSize()) {
         // Otettu kuva
@@ -198,7 +204,18 @@ fun CapturedImageView(
             ClassificationResultCard(result = it)
         }
 
-        //--------------------------------------------------
+        //------------------------(Extra Assignment)--------------------------
+
+        OutlinedTextField(
+            value = comment,
+            onValueChange = { comment = it },
+            label = { Text("Kommenti") },
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(horizontal = 16.dp, vertical = 8.dp),
+            maxLines = 3
+        )
+        //-------------------------------------------------------------------
 
         // Toimintopainikkeet
         Row(
@@ -212,7 +229,7 @@ fun CapturedImageView(
                 Spacer(Modifier.width(8.dp))
                 Text("Ota uudelleen")
             }
-            Button(onClick = onSave) {
+            Button(onClick = { onSave(comment) }) {
                 Icon(Icons.Default.Save, null)
                 Spacer(Modifier.width(8.dp))
                 Text("Tallenna löytö")

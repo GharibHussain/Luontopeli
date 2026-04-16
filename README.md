@@ -136,6 +136,7 @@ app/
     │   └── ProfileViewModel.kt    ←  Lisäominaisuus
     ├── LuontopeliApplication.kt
     └── MainActivity.kt
+```
 
 ---
 

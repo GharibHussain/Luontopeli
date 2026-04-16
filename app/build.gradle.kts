@@ -1,3 +1,6 @@
+import java.io.FileInputStream
+import java.util.Properties
+
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
@@ -7,6 +10,11 @@ plugins {
     alias(libs.plugins.google.services)  // Tarvitaan google-services.json:lle
 }
 
+val localProperties = Properties()
+val localPropertiesFile = rootProject.file("local.properties")
+if (localPropertiesFile.exists()) {
+    localProperties.load(FileInputStream(localPropertiesFile))
+}
 android {
     namespace = "com.example.luontopeli"
     compileSdk = 35
@@ -30,6 +38,35 @@ android {
 
     kotlinOptions {
         jvmTarget = "21"
+    }
+
+    signingConfigs {
+        create("release") {
+            // Luetaan arvot local.properties -tiedostosta
+            storeFile = file(localProperties.getProperty("KEYSTORE_PATH") ?: "")
+            storePassword = localProperties.getProperty("KEYSTORE_PASSWORD") ?: ""
+            keyAlias = localProperties.getProperty("KEY_ALIAS") ?: ""
+            keyPassword = localProperties.getProperty("KEY_PASSWORD") ?: ""
+        }
+    }
+
+    buildTypes {
+        release {
+            // Käytä release-allekirjoitusta
+            signingConfig = signingConfigs.getByName("release")
+            // Pienennä koodia ProGuardilla
+            isMinifyEnabled = true
+            isShrinkResources = true
+            proguardFiles(
+                getDefaultProguardFile("proguard-android-optimize.txt"),
+                "proguard-rules.pro"
+            )
+        }
+        debug {
+            // Debug-buildissa käytetään automaattisesti debug-avainta
+            applicationIdSuffix = ".debug"
+            versionNameSuffix = "-debug"
+        }
     }
 }
 

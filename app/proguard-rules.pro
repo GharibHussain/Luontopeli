@@ -19,3 +19,19 @@
 # If you keep the line number information, uncomment this to
 # hide the original source file name.
 #-renamesourcefileattribute SourceFile
+
+# proguard-rules.pro
+
+# Room – säilytä entiteetit ja DAO:t
+-keep class com.example.luontopeli.data.local.** { *; }
+
+# Firebase – ei minifioida Firebase SDK:ta
+-keep class com.google.firebase.** { *; }
+-keep class com.google.android.gms.** { *; }
+
+# ML Kit – säilytä merkinnät
+-keep class com.google.mlkit.** { *; }
+
+# Retrofit / Gson (jos käytössä)
+-keepattributes Signature
+-keepattributes *Annotation*

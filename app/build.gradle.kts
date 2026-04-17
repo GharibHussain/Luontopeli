@@ -77,6 +77,11 @@ dependencies {
     implementation(libs.androidx.material3)
     implementation(libs.androidx.ui)
 
+    // testing libraries
+    testImplementation("junit:junit:4.13.2")
+    androidTestImplementation("androidx.test.ext:junit:1.3.0")
+    androidTestImplementation("androidx.test:runner:1.7.0")
+
     // Compose BOM — hallitsee Compose-kirjastojen versiot automaattisesti
     val composeBom = platform(libs.androidx.compose.bom)
     implementation(composeBom)
